@@ -1,0 +1,314 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #e0f2f1 0%, #eceff1 50%, #e8f5e9 100%);
+    min-height: 100vh;
+    color: #1f2937;
+}
+
+.page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    font-size: 30px;
+    color: #0f766e;
+    margin-bottom: 6px;
+}
+
+.page-header p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(15, 118, 110, 0.12);
+    padding: 22px;
+}
+
+/* ---------- 计算器 ---------- */
+.screen {
+    background: #1e293b;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    min-height: 118px;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 22px;
+}
+
+.mode-badge {
+    font-size: 12px;
+    color: #5eead4;
+    background: rgba(94, 234, 212, 0.12);
+    padding: 2px 10px;
+    border-radius: 20px;
+}
+
+.error-text {
+    font-size: 12px;
+    color: #fca5a5;
+    text-align: right;
+}
+
+.screen-expr {
+    flex: 1;
+    color: #94a3b8;
+    font-size: 18px;
+    word-break: break-all;
+    text-align: right;
+    padding: 8px 0;
+    min-height: 30px;
+}
+
+.screen-result {
+    color: #f8fafc;
+    font-size: 36px;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-all;
+    min-height: 44px;
+}
+
+.screen-result.error {
+    color: #f87171;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+/* ---------- 按键 ---------- */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.keypad [colspan="2"] {
+    grid-column: span 2;
+}
+
+.keypad [rowspan="2"] {
+    grid-row: span 2;
+}
+
+.btn {
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    padding: 14px 0;
+    cursor: pointer;
+    transition: transform 0.08s ease, background 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+}
+
+.btn:active {
+    transform: scale(0.94);
+}
+
+.btn-num {
+    background: #f1f5f9;
+    color: #1f2937;
+}
+
+.btn-num:hover {
+    background: #e2e8f0;
+}
+
+.btn-func {
+    background: #f0fdfa;
+    color: #0f766e;
+    font-size: 16px;
+}
+
+.btn-func:hover {
+    background: #ccfbf1;
+}
+
+.btn-const {
+    background: #ecfeff;
+    color: #0e7490;
+}
+
+.btn-const:hover {
+    background: #cffafe;
+}
+
+.btn-op {
+    background: #14b8a6;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.btn-op:hover {
+    background: #0d9488;
+}
+
+.btn-equals {
+    background: #0d9488;
+    font-size: 26px;
+}
+
+.btn-equals:hover {
+    background: #0f766e;
+}
+
+.btn-mode {
+    background: #fef3c7;
+    color: #b45309;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.btn-mode:hover {
+    background: #fde68a;
+}
+
+.btn-warn {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.btn-warn:hover {
+    background: #fee2e2;
+}
+
+/* ---------- 历史记录 ---------- */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.history-header h2 {
+    font-size: 18px;
+    color: #0f766e;
+}
+
+.btn-clear-all {
+    border: 1px solid #fecaca;
+    background: #fff;
+    color: #dc2626;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-clear-all:hover {
+    background: #fef2f2;
+}
+
+.history-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 520px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 9px 12px;
+    transition: background 0.15s ease;
+}
+
+.history-item:hover {
+    background: #f0fdfa;
+}
+
+.history-main {
+    flex: 1;
+    cursor: pointer;
+    min-width: 0;
+}
+
+.history-expr {
+    font-size: 14px;
+    color: #374151;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-result {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f766e;
+}
+
+.history-time {
+    font-size: 12px;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+.btn-delete {
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.btn-delete:hover {
+    background: #fee2e2;
+}
+
+.history-empty {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+    padding: 36px 0;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 760px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .history-list {
+        max-height: 360px;
+    }
+
+    .screen-result {
+        font-size: 30px;
+    }
+}
