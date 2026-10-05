@@ -1,67 +1,68 @@
-# 计算器后端
+# Calculator Backend
 
-前后端分离计算器系统的后端。接收前端发来的表达式，校验、解析、计算，
-把每次成功的结果存进 SQLite，并提供历史记录的查询和删除。
-启动后同时托管前端页面，一个地址就是完整网站。
+The back end of a front-end/back-end separated calculator system. It receives an expression
+from the front end, validates, parses, and evaluates it, stores every successful result in
+SQLite, and provides history query and delete endpoints. On startup it also serves the
+front-end pages, so one URL is the whole website.
 
-## 技术栈
+## Tech stack
 
 - Java 8
-- JDK 自带 `com.sun.net.httpserver.HttpServer`
-- SQLite，驱动 `sqlite-jdbc` 3.36.0.3（在 `lib/` 下）
-- 手写递归下降解析器，不用 eval
+- JDK built-in `com.sun.net.httpserver.HttpServer`
+- SQLite via `sqlite-jdbc` 3.36.0.3 (in `lib/`)
+- Hand-written recursive-descent parser — no `eval`
 
-## 目录
+## Layout
 
-```
+```text
 src/main/java/com/course/calculator/
-├─ Main.java               入口、路由
-├─ controller/             接口、静态文件
-├─ service/                业务编排
-├─ core/                   表达式解析、角度模式、异常
-├─ db/                     数据库
-├─ model/                  记录模型
-└─ util/                   JSON
-src/main/resources/webapp/ 打包进 jar 的前端
-src/test/java/             测试
-lib/                       SQLite 驱动
+├─ Main.java               entry point, routing
+├─ controller/             HTTP endpoints, static files
+├─ service/                 business orchestration
+├─ core/                   expression parser, angle mode, exceptions
+├─ db/                      database
+├─ model/                  record model
+└─ util/                   JSON helpers
+src/main/resources/webapp/  front-end files packaged into the jar
+src/test/java/             tests
+lib/                        SQLite driver
 ```
 
-## 运行
+## Run
 
-Windows 下不需要 Maven：
+No Maven needed on Windows:
 
 ```bat
 build.bat
 run.bat
 ```
 
-默认 8080 端口，访问 http://localhost:8080。
+Defaults to port 8080, then open http://localhost:8080.
 
-用 Maven：
+With Maven:
 
 ```bash
 mvn package
 java -jar target/calculator-backend.jar
 ```
 
-用 Docker：
+With Docker:
 
 ```bash
 docker build -t calculator-backend .
 docker run -p 8080:8080 calculator-backend
 ```
 
-## 配置
+## Configuration
 
-| 环境变量 | 作用 | 默认值 |
+| Env variable | Purpose | Default |
 |---|---|---|
-| `PORT` | 端口（云平台会注入） | 8080 |
-| `CALC_DB` | 数据库文件路径 | data/calculator.db |
+| `PORT` | Listening port (injected by the cloud platform) | 8080 |
+| `CALC_DB` | SQLite database file path | data/calculator.db |
 
-## 数据库
+## Database
 
-首次启动自动建表，不用手动处理：
+The table is created automatically on first startup; no manual setup:
 
 ```sql
 CREATE TABLE IF NOT EXISTS calculation_history (
@@ -72,37 +73,38 @@ CREATE TABLE IF NOT EXISTS calculation_history (
 );
 ```
 
-## 接口
+## API
 
-| 方法 | 路径 | 说明 | 状态码 |
+| Method | Path | Description | Status code |
 |---|---|---|---|
-| GET | /api/health | 健康检查 | 200 |
-| POST | /api/calculate | 计算并存历史 | 200 / 400 |
-| GET | /api/history | 查全部历史 | 200 |
-| DELETE | /api/history/{id} | 删一条 | 200 / 404 |
-| DELETE | /api/history | 清空 | 200 |
+| GET | /api/health | Health check | 200 |
+| POST | /api/calculate | Evaluate and save to history | 200 / 400 |
+| GET | /api/history | List all history | 200 |
+| DELETE | /api/history/{id} | Delete one record | 200 / 404 |
+| DELETE | /api/history | Clear all history | 200 |
 
-请求：
+Request:
 
 ```json
 { "expression": "(1+2)*3", "angleMode": "DEG" }
 ```
 
-成功：
+Success:
 
 ```json
 { "success": true, "expression": "(1+2)*3", "result": "9",
   "id": 1, "createdAt": "2026-10-05 11:20:00" }
 ```
 
-失败：
+Error:
 
 ```json
 { "success": false, "message": "除数不能为 0（位置 4）" }
 ```
 
-## 和前端的连接
+## Connecting the front end
 
-- 默认：前端文件放在 `src/main/resources/webapp/`，后端同源托管，
-  前端 `js/config.js` 里 `API_BASE` 留空。
-- 分开部署：`API_BASE` 填本服务地址，响应已带跨域头。
+- Default: the front-end files live in `src/main/resources/webapp/` and are served
+  same-origin by the back end, so `API_BASE` in `js/config.js` stays empty.
+- Separate deployment: set `API_BASE` to this service's address. Responses already carry
+  CORS headers.
